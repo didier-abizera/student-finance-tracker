@@ -177,52 +177,42 @@
     <p>&copy; 2025 Student Finance Tracker &mdash; Didier Abizera</p>
   </footer>
 
+  <!-- javascript files loaded in order -->
+  <script src="scripts/storage.js"></script>
+  <script src="scripts/state.js"></script>
+  <script src="scripts/validators.js"></script>
+  <script src="scripts/search.js"></script>
+  <script src="scripts/ui.js"></script>
+
   <script>
-    // hamburger menu toggle
-   
-  // hamburger menu toggle for mobile
-  const navToggle = document.querySelector('.nav-toggle');
-  const siteNav = document.querySelector('.site-nav');
+    // hamburger menu toggle for mobile
+    var navToggle = document.querySelector('.nav-toggle');
+    var siteNav = document.querySelector('.site-nav');
 
-  navToggle.addEventListener('click', function() {
-    siteNav.classList.toggle('open');
-  });
-
-  // highlight active nav link when clicked
-  const navLinks = document.querySelectorAll('.site-nav a');
-
-  navLinks.forEach(function(link) {
-    link.addEventListener('click', function() {
-      // remove active from all links
-      navLinks.forEach(function(l) {
-        l.classList.remove('active');
-      });
-      // add active to clicked link
-      link.classList.add('active');
-
-      // close mobile nav
-      siteNav.classList.remove('open');
+    navToggle.addEventListener('click', function() {
+      siteNav.classList.toggle('open');
     });
-  });
-</script>
 
-        // hide all sections
-        sections.forEach(function(section) {
-          section.classList.remove('active');
+    // highlight active nav link when clicked
+    var navLinks = document.querySelectorAll('.site-nav a');
+
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        navLinks.forEach(function(l) {
+          l.classList.remove('active');
         });
-
-        // show clicked section
-        const targetId = link.getAttribute('href').replace('#', '');
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-          targetSection.classList.add('active');
-        }
-
-        // close mobile nav
+        link.classList.add('active');
         siteNav.classList.remove('open');
       });
     });
+
+    // start the app
+    initState();
+    initUI();
+    renderStats();
+    refreshTable();
   </script>
+
 
 </body>
 </html>
