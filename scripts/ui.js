@@ -1,4 +1,5 @@
 // ui.js
+// ui.js - handles all UI rendering, stats, forms and events
 // controls everything the user sees on the screen
 
 // renders all records in the table
