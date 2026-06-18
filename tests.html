@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Regex Tests - Student Finance Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f0f4f8;
+    }
+
+    h1 {
+      color: #2563eb;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      color: #333;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 6px;
+    }
+
+    .test {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .pass {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .fail {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge {
+      font-weight: bold;
+      font-size: 13px;
+      min-width: 50px;
+    }
+
+    #summary {
+      margin-top: 30px;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Regex Validation Tests</h1>
+  <p>Testing all regex rules for Student Finance Tracker</p>
+
+  <div id="test-results"></div>
+  <div id="summary"></div>
+
+  <script src="scripts/validators.js"></script>
+  <script>
+    var passed = 0;
+    var failed = 0;
+    var results = document.getElementById('test-results');
+
+    // helper function to run a test
+    function runTest(description, actual, expected) {
+      var success = actual === expected;
+      if (success) {
+        passed++;
+      } else {
+        failed++;
+      }
+
+      var div = document.createElement('div');
+      div.className = 'test ' + (success ? 'pass' : 'fail');
+      div.innerHTML =
+        '<span class="badge">' + (success ? 'PASS' : 'FAIL') + '</span>' +
+        '<span>' + description + '</span>';
+      results.appendChild(div);
+    }
+
+    // helper to add section heading
+    function addHeading(title) {
+      var h2 = document.createElement('h2');
+      h2.textContent = title;
+      results.appendChild(h2);
+    }
+
+
+    // Rule 1: Description
+    
+    addHeading('Rule 1 - Description Validation');
+
+    runTest(
+      'Valid description "Lunch at cafeteria" should pass',
+      validateDescription('Lunch at cafeteria'),
+      true
+    );
+
+    runTest(
+      'Description with leading space " Lunch" should fail',
+      validateDescription(' Lunch') !== true,
+      true
+    );
+
+    runTest(
+      'Description with trailing space "Lunch " should fail',
+      validateDescription('Lunch ') !== true,
+      true
+    );
+
+    runTest(
+      'Empty description should fail',
+      validateDescription('') !== true,
+      true
+    );
+
+    runTest(
+      'Single word "Lunch" should pass',
+      validateDescription('Lunch'),
+      true
+    );
+
+    
+    // Rule 2: Amount
+    
+    addHeading('Rule 2 - Amount Validation');
+
+    runTest(
+      'Valid amount "2500" should pass',
+      validateAmount('2500'),
+      true
+    );
+
+    runTest(
+      'Valid decimal "12.50" should pass',
+      validateAmount('12.50'),
+      true
+    );
+
+    runTest(
+      'Amount "0" should pass',
+      validateAmount('0'),
+      true
+    );
+
+    runTest(
+      'Amount "abc" should fail',
+      validateAmount('abc') !== true,
+      true
+    );
+
+    runTest(
+      'Amount "12.555" (3 decimals) should fail',
+      validateAmount('12.555') !== true,
+      true
+    );
+
+    runTest(
+      'Empty amount should fail',
+      validateAmount('') !== true,
+      true
+    );
+
+    runTest(
+      'Amount "-100" should fail',
+      validateAmount('-100') !== true,
+      true
+    );
+
+    
+    // Rule 3: Date
+    
+    addHeading('Rule 3 - Date Validation');
+
+    runTest(
+      'Valid date "2025-09-25" should pass',
+      validateDate('2025-09-25'),
+      true
+    );
+
+    runTest(
+      'Date "2025-13-01" (invalid month) should fail',
+      validateDate('2025-13-01') !== true,
+      true
+    );
+
+    runTest(
+      'Date "2025-09-32" (invalid day) should fail',
+      validateDate('2025-09-32') !== true,
+      true
+    );
+
+    runTest(
+      'Date "25-09-2025" (wrong format) should fail',
+      validateDate('25-09-2025') !== true,
+      true
+    );
+
+    runTest(
+      'Empty date should fail',
+      validateDate('') !== true,
+      true
+    );
+
+    
+    // Rule 4: Category
+    
+    addHeading('Rule 4 - Category Validation');
+
+    runTest(
+      'Valid category "Food" should pass',
+      validateCategory('Food'),
+      true
+    );
+
+    runTest(
+      'Valid category "Add-on" should pass',
+      validateCategory('Add-on'),
+      true
+    );
+
+    runTest(
+      'Category with numbers "Food123" should fail',
+      validateCategory('Food123') !== true,
+      true
+    );
+
+    runTest(
+      'Empty category should fail',
+      validateCategory('') !== true,
+      true
+    );
+
+    
+    // Rule 5: Advanced - Duplicate Words
+    
+    addHeading('Rule 5 (Advanced) - Duplicate Word Detection');
+
+    runTest(
+      'Description "the the lunch" should fail duplicate check',
+      checkDuplicateWords('the the lunch') !== true,
+      true
+    );
+
+    runTest(
+      'Description "lunch at school" should pass duplicate check',
+      checkDuplicateWords('lunch at school'),
+      true
+    );
+
+    runTest(
+      'Description "bus bus fare" should fail duplicate check',
+      checkDuplicateWords('bus bus fare') !== true,
+      true
+    );
+
+    // =====================
+    // Summary
+    // =====================
+    var summary = document.getElementById('summary');
+    var total = passed + failed;
+    summary.style.background = failed === 0 ? '#d1fae5' : '#fee2e2';
+    summary.style.color = failed === 0 ? '#065f46' : '#991b1b';
+    summary.textContent = 'Results: ' + passed + ' passed, ' + failed + ' failed out of ' + total + ' tests';
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "txn_0001",
+    "description": "Lunch at cafeteria",
+    "amount": 2500,
+    "category": "Food",
+    "date": "2025-09-25",
+    "createdAt": "2025-09-25T08:30:00.000Z",
+    "updatedAt": "2025-09-25T08:30:00.000Z"
+  },
+  {
+    "id": "txn_0002",
+    "description": "Chemistry textbook",
+    "amount": 89990,
+    "category": "Books",
+    "date": "2025-09-23",
+    "createdAt": "2025-09-23T10:00:00.000Z",
+    "updatedAt": "2025-09-23T10:00:00.000Z"
+  },
+  {
+    "id": "txn_0003",
+    "description": "Bus pass for the month",
+    "amount": 15000,
+    "category": "Transport",
+    "date": "2025-09-01",
+    "createdAt": "2025-09-01T07:00:00.000Z",
+    "updatedAt": "2025-09-01T07:00:00.000Z"
+  },
+  {
+    "id": "txn_0004",
+    "description": "Coffee with friends",
+    "amount": 3500,
+    "category": "Entertainment",
+    "date": "2025-09-28",
+    "createdAt": "2025-09-28T15:00:00.000Z",
+    "updatedAt": "2025-09-28T15:00:00.000Z"
+  },
+  {
+    "id": "txn_0005",
+    "description": "Tuition fees payment",
+    "amount": 450000,
+    "category": "Fees",
+    "date": "2025-09-02",
+    "createdAt": "2025-09-02T09:00:00.000Z",
+    "updatedAt": "2025-09-02T09:00:00.000Z"
+  },
+  {
+    "id": "txn_0006",
+    "description": "Breakfast at the canteen",
+    "amount": 1500,
+    "category": "Food",
+    "date": "2025-09-30",
+    "createdAt": "2025-09-30T07:30:00.000Z",
+    "updatedAt": "2025-09-30T07:30:00.000Z"
+  },
+  {
+    "id": "txn_0007",
+    "description": "Notebook and pens",
+    "amount": 4500,
+    "category": "Books",
+    "date": "2025-09-10",
+    "createdAt": "2025-09-10T11:00:00.000Z",
+    "updatedAt": "2025-09-10T11:00:00.000Z"
+  },
+  {
+    "id": "txn_0008",
+    "description": "Movie ticket",
+    "amount": 8000,
+    "category": "Entertainment",
+    "date": "2025-09-14",
+    "createdAt": "2025-09-14T18:00:00.000Z",
+    "updatedAt": "2025-09-14T18:00:00.000Z"
+  },
+  {
+    "id": "txn_0009",
+    "description": "Moto ride to campus",
+    "amount": 500,
+    "category": "Transport",
+    "date": "2025-09-29",
+    "createdAt": "2025-09-29T08:00:00.000Z",
+    "updatedAt": "2025-09-29T08:00:00.000Z"
+  },
+  {
+    "id": "txn_0010",
+    "description": "Phone data bundle",
+    "amount": 5000,
+    "category": "Other",
+    "date": "2025-09-15",
+    "createdAt": "2025-09-15T12:00:00.000Z",
+    "updatedAt": "2025-09-15T12:00:00.000Z"
+  },
+  {
+    "id": "txn_0011",
+    "description": "Dinner with Friends",
+    "amount": 12000,
+    "category": "Food",
+    "date": "2025-09-20",
+    "createdAt": "2025-09-20T19:00:00.000Z",
+    "updatedAt": "2025-09-20T19:00:00.000Z"
+  },
+  {
+    "id": "txn_0012",
+    "description": "Library printing fee",
+    "amount": 250,
+    "category": "Fees",
+    "date": "2025-09-18",
+    "createdAt": "2025-09-18T14:00:00.000Z",
+    "updatedAt": "2025-09-18T14:00:00.000Z"
+  }
+]
