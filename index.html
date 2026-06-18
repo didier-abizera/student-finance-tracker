@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Finance Tracker</title>
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+  <!-- skip link for keyboard users -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- header -->
+  <header class="site-header">
+    <h1>Student Finance Tracker</h1>
+    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+  </header>
+
+  <!-- navigation -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <ul role="list">
+      <li><a href="#about">About</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#records">Records</a></li>
+      <li><a href="#add-record">Add Record</a></li>
+      <li><a href="#settings">Settings</a></li>
+    </ul>
+  </nav>
+
+  <!-- main content -->
+  <main id="main-content">
+
+    <!-- about section -->
+    <section id="about" class="active" aria-labelledby="about-heading">
+      <h2 id="about-heading">About</h2>
+      <p>Welcome to Student Finance Tracker! This app helps you keep track of your daily spending as a student. You can add your expenses, see where your money is going, and make sure you stay within your budget.</p>
+      <br />
+      <p>Created by: Didier Abizera</p>
+      <p>Email: d.abizera@alustudent.com</p>
+      <p>GitHub: <a href="https://github.com/didier-abizera" target="_blank">https://github.com/didier-abizera</a></p>
+    </section>
+
+    <!-- dashboard section -->
+    <section id="dashboard" aria-labelledby="dashboard-heading">
+      <h2 id="dashboard-heading">Dashboard</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Records</h3>
+          <p id="total-records">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Spent</h3>
+          <p id="total-spent">0.00</p>
+        </div>
+        <div class="stat-card">
+          <h3>Top Category</h3>
+          <p id="top-category">None</p>
+        </div>
+        <div class="stat-card">
+          <h3>Budget Remaining</h3>
+          <p id="budget-remaining">0.00</p>
+        </div>
+      </div>
+      <div class="chart-container">
+        <h3>Last 7 Days</h3>
+        <div id="chart" aria-label="Last 7 days spending chart"></div>
+      </div>
+      <div id="budget-alert" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- records section -->
+    <section id="records" aria-labelledby="records-heading">
+      <h2 id="records-heading">Records</h2>
+      <div class="table-controls">
+        <label for="search-input">Search:</label>
+        <input type="text" id="search-input" placeholder="Type to search..." />
+        <label for="sort-select">Sort by:</label>
+        <select id="sort-select">
+          <option value="date">Date</option>
+          <option value="description">Description A-Z</option>
+          <option value="amount">Amount</option>
+        </select>
+        <label>
+          <input type="checkbox" id="case-toggle" />
+          Case sensitive
+        </label>
+      </div>
+      <div class="table-wrapper">
+        <table id="records-table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Description</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Category</th>
+              <th scope="col">Date</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="records-body">
+          </tbody>
+        </table>
+      </div>
+      <div id="records-status" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- add record section -->
+    <section id="add-record" aria-labelledby="form-heading">
+      <h2 id="form-heading">Add Record</h2>
+      <form id="record-form" novalidate>
+        <div class="form-group">
+          <label for="desc-input">Description</label>
+          <input type="text" id="desc-input" name="description" placeholder="e.g. Lunch at cafeteria" required />
+          <span class="error" id="desc-error" aria-live="polite"></span>
+        </div>
+        <div class="form-group">
+          <label for="amount-input">Amount (RWF)</label>
+          <input type="text" id="amount-input" name="amount" placeholder="e.g. 2500" required />
+          <span class="error" id="amount-error" aria-live="polite"></span>
+        </div>
+        <div class="form-group">
+          <label for="category-select">Category</label>
+          <select id="category-select" name="category">
+            <option value="Food">Food</option>
+            <option value="Books">Books</option>
+            <option value="Transport">Transport</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Fees">Fees</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="date-input">Date</label>
+          <input type="date" id="date-input" name="date" required />
+          <span class="error" id="date-error" aria-live="polite"></span>
+        </div>
+        <div class="form-actions">
+          <button type="submit" id="submit-btn">Save Record</button>
+          <button type="button" id="cancel-btn">Cancel</button>
+        </div>
+        <div id="form-status" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <!-- settings section -->
+    <section id="settings" aria-labelledby="settings-heading">
+      <h2 id="settings-heading">Settings</h2>
+      <form id="settings-form" novalidate>
+        <div class="form-group">
+          <label for="budget-cap">Monthly Budget Cap (RWF)</label>
+          <input type="text" id="budget-cap" placeholder="e.g. 50000" />
+          <span class="error" id="budget-error" aria-live="polite"></span>
+        </div>
+        <div class="form-group">
+          <label for="usd-rate">USD to RWF Rate</label>
+          <input type="text" id="usd-rate" placeholder="e.g. 1300" />
+        </div>
+        <div class="form-group">
+          <label for="eur-rate">EUR to RWF Rate</label>
+          <input type="text" id="eur-rate" placeholder="e.g. 1400" />
+        </div>
+        <button type="submit">Save Settings</button>
+      </form>
+      <div class="import-export">
+        <h3>Data Management</h3>
+        <button id="export-btn">Export JSON</button>
+        <label for="import-input" class="import-label">Import JSON</label>
+        <input type="file" id="import-input" accept=".json" />
+      </div>
+    </section>
+
+  </main>
+
+  <!-- footer -->
+  <footer class="site-footer">
+    <p>&copy; 2025 Student Finance Tracker &mdash; Didier Abizera</p>
+  </footer>
+
+  <script>
+    // hamburger menu toggle
+   
+  // hamburger menu toggle for mobile
+  const navToggle = document.querySelector('.nav-toggle');
+  const siteNav = document.querySelector('.site-nav');
+
+  navToggle.addEventListener('click', function() {
+    siteNav.classList.toggle('open');
+  });
+
+  // highlight active nav link when clicked
+  const navLinks = document.querySelectorAll('.site-nav a');
+
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function() {
+      // remove active from all links
+      navLinks.forEach(function(l) {
+        l.classList.remove('active');
+      });
+      // add active to clicked link
+      link.classList.add('active');
+
+      // close mobile nav
+      siteNav.classList.remove('open');
+    });
+  });
+</script>
+
+        // hide all sections
+        sections.forEach(function(section) {
+          section.classList.remove('active');
+        });
+
+        // show clicked section
+        const targetId = link.getAttribute('href').replace('#', '');
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.classList.add('active');
+        }
+
+        // close mobile nav
+        siteNav.classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>
