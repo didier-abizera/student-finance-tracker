@@ -1,5 +1,4 @@
 // ui.js
-// ui.js - handles all UI rendering, stats, forms and events
 // controls everything the user sees on the screen
 
 // renders all records in the table
@@ -21,10 +20,16 @@ function renderTable(records, regex) {
     var descHighlighted = highlightMatch(record.description, regex);
     var catHighlighted = highlightMatch(record.category, regex);
 
-    tr.innerHTML = 
+    var usdRate = parseFloat(appState.settings.usdRate) || 1300;
+    var eurRate = parseFloat(appState.settings.eurRate) || 1400;
+    var amountUSD = (parseFloat(record.amount) / usdRate).toFixed(2);
+    var amountEUR = (parseFloat(record.amount) / eurRate).toFixed(2);
+
+    tr.innerHTML =
       '<td>' + record.id + '</td>' +
       '<td>' + descHighlighted + '</td>' +
-      '<td>' + parseFloat(record.amount).toLocaleString() + ' RWF</td>' +
+      '<td>' + parseFloat(record.amount).toLocaleString() + ' RWF<br>' +
+      '<small style="color:#64748b;font-size:11px;">$' + amountUSD + ' | €' + amountEUR + '</small></td>' +
       '<td>' + catHighlighted + '</td>' +
       '<td>' + record.date + '</td>' +
       '<td>' +
@@ -51,7 +56,17 @@ function renderStats() {
   records.forEach(function(record) {
     total += parseFloat(record.amount);
   });
-  document.getElementById('total-spent').textContent = total.toLocaleString() + ' RWF';
+
+  var usdRate = parseFloat(settings.usdRate) || 1300;
+  var eurRate = parseFloat(settings.eurRate) || 1400;
+  var totalUSD = (total / usdRate).toFixed(2);
+  var totalEUR = (total / eurRate).toFixed(2);
+
+  document.getElementById('total-spent').innerHTML =
+    total.toLocaleString() + ' RWF<br>' +
+    '<small style="font-size:14px;color:#64748b;">' +
+    '$ ' + totalUSD + ' USD | € ' + totalEUR + ' EUR' +
+    '</small>';
 
   // top category
   var categoryCounts = {};
@@ -114,8 +129,6 @@ function renderChart() {
     days.push(dateStr);
   }
 
-  var maxAmount = 0;
-
   var dayTotals = days.map(function(day) {
     var total = 0;
     appState.records.forEach(function(record) {
@@ -123,16 +136,20 @@ function renderChart() {
         total += parseFloat(record.amount);
       }
     });
-    if (total > maxAmount) maxAmount = total;
     return { day: day, total: total };
   });
 
+  var maxAmount = 0;
   dayTotals.forEach(function(item) {
-    var bar = document.createElement('div');
-    var height = maxAmount > 0 ? (item.total / maxAmount) * 100 : 0;
+    if (item.total > maxAmount) maxAmount = item.total;
+  });
+
+  dayTotals.forEach(function(item) {
+    var height = maxAmount > 0 ? Math.max((item.total / maxAmount) * 100, item.total > 0 ? 10 : 0) : 0;
     var shortDay = item.day.slice(5);
 
-    bar.style.cssText = 
+    var bar = document.createElement('div');
+    bar.style.cssText =
       'flex:1;' +
       'display:flex;' +
       'flex-direction:column;' +
@@ -141,7 +158,7 @@ function renderChart() {
       'gap:4px;';
 
     bar.innerHTML =
-      '<div style="width:100%;background:#2563eb;border-radius:4px 4px 0 0;height:' + height + '%;min-height:' + (item.total > 0 ? '4' : '0') + 'px;" aria-label="' + shortDay + ': ' + item.total + ' RWF"></div>' +
+      '<div style="width:80%;background:#2563eb;border-radius:4px 4px 0 0;height:' + height + '%;min-height:' + (item.total > 0 ? '8' : '0') + 'px;"></div>' +
       '<span style="font-size:10px;color:#64748b;">' + shortDay + '</span>';
 
     chart.appendChild(bar);
@@ -280,7 +297,6 @@ function handleImport(e) {
     try {
       var imported = JSON.parse(event.target.result);
 
-      // validate structure
       if (!Array.isArray(imported)) {
         alert('Invalid file format. File must contain an array of records.');
         return;
@@ -324,6 +340,7 @@ function handleSettingsSubmit(e) {
 
   updateSettings(settings);
   renderStats();
+  refreshTable();
   alert('Settings saved successfully!');
 }
 
