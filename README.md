@@ -106,19 +106,18 @@ Example: "the the lunch" fails. "lunch at school" passes.
 ## Project Structure
     student-finance-tracker/
 
-── index.html
-── tests.html
-── seed.json
-── README.md
-── styles/  ── main.css
-── scripts/-storage.js
-           - state.js
-           - validators.js
-           - search.js
-           - ui.js
+.index.html
+.tests.html
+.seed.json
+.README.md
+.styles/main.css
+.scripts/storage.js
+        /state.js
+        /validators.js
+        /search.js
+        /ui.js
 
-── assets/
-── images/─ wireframes
+.assets/images/wireframes
 
 ## Demo Video
 https://www.youtube.com/watch?v=2YHvm8yaD-U
