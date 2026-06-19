@@ -91,26 +91,31 @@ function renderStats() {
   // budget remaining
   var budgetCap = parseFloat(settings.budgetCap) || 0;
   var remaining = budgetCap - total;
-  document.getElementById('budget-remaining').textContent = remaining.toLocaleString() + ' RWF';
+  var remainingUSD = (remaining / usdRate).toFixed(2);
+var remainingEUR = (remaining / eurRate).toFixed(2);
+document.getElementById('budget-remaining').innerHTML =
+  remaining.toLocaleString() + ' RWF<br>' +
+  '<small style="font-size:14px;color:#64748b;">' +
+  '$ ' + remainingUSD + ' USD | € ' + remainingEUR + ' EUR' +
+  '</small>';
 
   // budget alert
-  var alert = document.getElementById('budget-alert');
+  var alertBox = document.getElementById('budget-alert');
   if (budgetCap > 0) {
     if (remaining < 0) {
-      alert.textContent = 'Warning! You have exceeded your budget by ' + Math.abs(remaining).toLocaleString() + ' RWF';
-      alert.className = 'over';
-      alert.setAttribute('aria-live', 'assertive');
+      alertBox.textContent = 'Warning! You have exceeded your budget by ' + Math.abs(remaining).toLocaleString() + ' RWF';
+      alertBox.className = 'over';
+      alertBox.setAttribute('aria-live', 'assertive');
     } else {
-      alert.textContent = 'You have ' + remaining.toLocaleString() + ' RWF remaining in your budget';
-      alert.className = 'under';
-      alert.setAttribute('aria-live', 'polite');
+      alertBox.textContent = 'You have ' + remaining.toLocaleString() + ' RWF remaining in your budget';
+      alertBox.className = 'under';
+      alertBox.setAttribute('aria-live', 'polite');
     }
   } else {
-    alert.className = '';
-    alert.textContent = '';
+    alertBox.className = '';
+    alertBox.textContent = '';
   }
 
-  // draw the 7 day chart
   renderChart();
 }
 
@@ -125,44 +130,58 @@ function renderChart() {
   for (var i = 6; i >= 0; i--) {
     var d = new Date(today);
     d.setDate(today.getDate() - i);
-    var dateStr = d.toISOString().split('T')[0];
-    days.push(dateStr);
+    var year = d.getFullYear();
+    var month = String(d.getMonth() + 1).padStart(2, '0');
+    var dayNum = String(d.getDate()).padStart(2, '0');
+    days.push(year + '-' + month + '-' + dayNum);
   }
 
-  var dayTotals = days.map(function(day) {
-    var total = 0;
-    appState.records.forEach(function(record) {
-      if (record.date === day) {
-        total += parseFloat(record.amount);
-      }
-    });
-    return { day: day, total: total };
-  });
-
+  var dayTotals = [];
   var maxAmount = 0;
-  dayTotals.forEach(function(item) {
-    if (item.total > maxAmount) maxAmount = item.total;
-  });
 
-  dayTotals.forEach(function(item) {
-    var height = maxAmount > 0 ? Math.max((item.total / maxAmount) * 100, item.total > 0 ? 10 : 0) : 0;
+  for (var j = 0; j < days.length; j++) {
+    var total = 0;
+    for (var k = 0; k < appState.records.length; k++) {
+      if (appState.records[k].date === days[j]) {
+        total += parseFloat(appState.records[k].amount);
+      }
+    }
+    if (total > maxAmount) maxAmount = total;
+    dayTotals.push({ day: days[j], total: total });
+  }
+
+  for (var m = 0; m < dayTotals.length; m++) {
+    var item = dayTotals[m];
+    var barHeight = maxAmount > 0 && item.total > 0 ? Math.round((item.total / maxAmount) * 100) : 0;
     var shortDay = item.day.slice(5);
 
+    var wrapper = document.createElement('div');
+    wrapper.style.flex = '1';
+    wrapper.style.display = 'flex';
+    wrapper.style.flexDirection = 'column';
+    wrapper.style.alignItems = 'center';
+    wrapper.style.justifyContent = 'flex-end';
+    wrapper.style.height = '100%';
+    wrapper.style.gap = '4px';
+
     var bar = document.createElement('div');
-    bar.style.cssText =
-      'flex:1;' +
-      'display:flex;' +
-      'flex-direction:column;' +
-      'align-items:center;' +
-      'justify-content:flex-end;' +
-      'gap:4px;';
+    bar.style.width = '60%';
+    bar.style.background = '#2563eb';
+    bar.style.borderRadius = '4px 4px 0 0';
+    bar.style.height = barHeight + '%';
+    if (item.total > 0 && barHeight < 5) {
+      bar.style.height = '5%';
+    }
 
-    bar.innerHTML =
-      '<div style="width:80%;background:#2563eb;border-radius:4px 4px 0 0;height:' + height + '%;min-height:' + (item.total > 0 ? '8' : '0') + 'px;"></div>' +
-      '<span style="font-size:10px;color:#64748b;">' + shortDay + '</span>';
+    var label = document.createElement('span');
+    label.style.fontSize = '10px';
+    label.style.color = '#64748b';
+    label.textContent = shortDay;
 
-    chart.appendChild(bar);
-  });
+    wrapper.appendChild(bar);
+    wrapper.appendChild(label);
+    chart.appendChild(wrapper);
+  }
 }
 
 // handles the form submit for adding or editing a record
@@ -221,10 +240,7 @@ function handleFormSubmit(e) {
     document.getElementById('form-status').textContent = 'Record added successfully';
   }
 
-  // reset form
   document.getElementById('record-form').reset();
-
-  // refresh table and stats
   refreshTable();
   renderStats();
 }
@@ -247,7 +263,6 @@ function handleEdit(id) {
   document.getElementById('form-heading').textContent = 'Edit Record';
   document.getElementById('submit-btn').textContent = 'Update Record';
 
-  // scroll to form
   document.getElementById('add-record').scrollIntoView({ behavior: 'smooth' });
 }
 
@@ -346,10 +361,8 @@ function handleSettingsSubmit(e) {
 
 // sets up all event listeners when page loads
 function initUI() {
-  // form submit
   document.getElementById('record-form').addEventListener('submit', handleFormSubmit);
 
-  // cancel button
   document.getElementById('cancel-btn').addEventListener('click', function() {
     document.getElementById('record-form').reset();
     document.getElementById('desc-error').textContent = '';
@@ -361,25 +374,13 @@ function initUI() {
     document.getElementById('submit-btn').textContent = 'Save Record';
   });
 
-  // search input
   document.getElementById('search-input').addEventListener('input', refreshTable);
-
-  // sort select
   document.getElementById('sort-select').addEventListener('change', refreshTable);
-
-  // case toggle
   document.getElementById('case-toggle').addEventListener('change', refreshTable);
-
-  // export button
   document.getElementById('export-btn').addEventListener('click', handleExport);
-
-  // import input
   document.getElementById('import-input').addEventListener('change', handleImport);
-
-  // settings form
   document.getElementById('settings-form').addEventListener('submit', handleSettingsSubmit);
 
-  // load settings values into form
   document.getElementById('budget-cap').value = appState.settings.budgetCap || '';
   document.getElementById('usd-rate').value = appState.settings.usdRate || '';
   document.getElementById('eur-rate').value = appState.settings.eurRate || '';

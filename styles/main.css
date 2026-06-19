@@ -7,7 +7,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f4f8;
+  background-color: #f9f9f9;
   color: #333333;
   font-size: 16px;
   line-height: 1.6;
@@ -23,7 +23,7 @@ html {
   position: absolute;
   top: -100px;
   left: 0;
-  background: #2563eb;
+  background: #e0e3ec;
   color: white;
   padding: 8px 16px;
   text-decoration: none;
@@ -38,15 +38,15 @@ html {
 
 /* sticky header */
 .site-header {
-  background-color: #2563eb;
+  background-color: yellowgreen;
   color: white;
-  padding: 14px 20px;
+  padding: 15px 21px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 80;
 }
 
 /* centered title */
@@ -76,8 +76,8 @@ html {
 
 /* sticky nav below header */
 .site-nav {
-  background-color: white;
-  border-bottom: 2px solid #e2e8f0;
+  background-color: #f9f9f9;
+  
   position: sticky;
   top: 52px;
   z-index: 99;
@@ -103,7 +103,7 @@ html {
 }
 
 .site-nav a:hover {
-  color: #2563eb;
+  color: #333333;
   border-bottom: 3px solid #2563eb;
 }
 
@@ -119,9 +119,9 @@ section {
   background: white;
   border-radius: 8px;
   padding: 24px;
-  margin-bottom: 24px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-bottom: 0;
+  
+  
   scroll-margin-top: 110px;
   animation: fadeIn 0.3s ease;
 }
@@ -131,7 +131,7 @@ section h2 {
   color: #2563eb;
   margin-bottom: 16px;
   padding-bottom: 8px;
-  border-bottom: 2px solid #e2e8f0;
+  
 }
 
 /* dashboard stat cards */
@@ -151,7 +151,7 @@ section h2 {
 }
 
 .stat-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  
   transform: translateY(-2px);
   transition: all 0.3s ease;
 }
@@ -167,7 +167,7 @@ section h2 {
 .stat-card p {
   font-size: 24px;
   font-weight: bold;
-  color: #2563eb;
+  color: #333333;
 }
 
 /* chart area */
@@ -185,7 +185,7 @@ section h2 {
   display: flex;
   align-items: flex-end;
   gap: 8px;
-  height: 120px;
+  height: 200px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -307,7 +307,7 @@ mark {
   border-radius: 6px;
   font-size: 15px;
   color: #333;
-  background: white;
+  background: #f0f4f8;
 }
 
 .form-group input:focus,
@@ -430,7 +430,7 @@ button {
 .site-footer {
   text-align: center;
   padding: 20px;
-  background: white;
+  background: #f0f4f8;
   border-top: 1px solid #e2e8f0;
   color: #64748b;
   font-size: 14px;
